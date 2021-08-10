@@ -1,23 +1,49 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import Counter from "./components/Counter";
+import PostItem from "./components/PostItem";
+import PostList from "./components/PostList";
+import './styles/App.css';
+
 
 function App() {
+
+  const [posts, setPosts] = useState([
+    { id: 1, title: 'Js', body: 'Description' },
+    { id: 2, title: 'Js2', body: 'Description' },
+    { id: 3, title: 'Js3', body: 'Description' },
+  ])
+
+  const [posts2, setPosts2] = useState([
+    { id: 1, title: 'poeton', body: 'Description' },
+    { id: 2, title: 'poeton', body: 'Description' },
+    { id: 3, title: 'poeton', body: 'Description' },
+  ])
+
+  const [likes, setLikes] = useState(0),
+    [value, setValue] = useState('текст');
+
+  function increment() {
+    setLikes(likes + 1);
+  }
+
+  function decrement() {
+    setLikes(likes - 1);
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Counter />
+      {/* <PostItem post={} /> */}
+      <PostList posts={posts} title='Список постовJS' />
+      <PostList posts={posts2} title='Список постов Poeton' />
+
+      {/* <h2>{value}</h2>
+      <input
+        type="text"
+        value={value}
+        onChange={event => setValue(event.target.value)}
+      /> */}
+
     </div>
   );
 }
