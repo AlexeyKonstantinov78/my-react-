@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import Counter from "./components/Counter";
 import PostItem from "./components/PostItem";
 import PostList from "./components/PostList";
@@ -21,6 +21,8 @@ function App() {
 
   const [title, setTitle] = useState('');
 
+  const bodyInputRef = useRef();
+
   function increment() {
     setLikes(likes + 1);
   }
@@ -32,6 +34,7 @@ function App() {
   const addNewPost = (e) => {
     e.preventDefault();
     console.log(title);
+    console.log(bodyInputRef.current.value);
   }
 
   return (
@@ -45,7 +48,18 @@ function App() {
           onChange={e => setTitle(e.target.value)}
           type="text"
           placeholder="Название поста" />
-        <MyInput type="text" placeholder="Описание поста" />
+
+        {/* не рекомендуется в реакт ползать по дом дереву на прямую */}
+        {/* <input ref={bodyInputRef} type="text" /> */}
+
+        {/* Неуправляемы / Неконтролируемы компонент*/}
+        <MyInput
+          ref={bodyInputRef}
+          type="text"
+          placeholder="Описание поста"
+
+        />
+
         <MyButton onClick={addNewPost}>Создать пост</MyButton>
       </form>
 
