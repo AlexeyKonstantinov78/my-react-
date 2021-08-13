@@ -19,9 +19,10 @@ function App() {
   const [likes, setLikes] = useState(0),
     [value, setValue] = useState('текст');
 
-  const [title, setTitle] = useState('');
+  const [post, setPost] = useState({ title: '', body: '' });
+  // [body, setBody] = useState('');
 
-  const bodyInputRef = useRef();
+  // const bodyInputRef = useRef();
 
   function increment() {
     setLikes(likes + 1);
@@ -33,8 +34,19 @@ function App() {
 
   const addNewPost = (e) => {
     e.preventDefault();
-    console.log(title);
-    console.log(bodyInputRef.current.value);
+
+    // console.log(bodyInputRef.current.value);
+    // const newPost = {
+    //   id: Date.now(),
+    //   title,
+    //   body
+    // }
+
+    setPosts([...posts, { ...post, id: Date.now() }]);
+
+    setPost({ title: '', body: '' });
+    // setTitle('');
+    // setBody('');
   }
 
   return (
@@ -44,8 +56,8 @@ function App() {
 
       <form>
         <MyInput
-          value={title}
-          onChange={e => setTitle(e.target.value)}
+          value={post.title}
+          onChange={e => setPost({ ...post, title: e.target.value })}
           type="text"
           placeholder="Название поста" />
 
@@ -54,10 +66,10 @@ function App() {
 
         {/* Неуправляемы / Неконтролируемы компонент*/}
         <MyInput
-          ref={bodyInputRef}
+          value={post.body}
+          onChange={e => setPost({ ...post, body: e.target.value })}
           type="text"
           placeholder="Описание поста"
-
         />
 
         <MyButton onClick={addNewPost}>Создать пост</MyButton>
