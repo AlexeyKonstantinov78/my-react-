@@ -37,23 +37,21 @@ function App() {
     setPosts([...posts, newPost]);
   }
 
+  // удаление поста
+  const removePost = (post) => {
+    setPosts(posts.filter(p => p.id !== post.id))
+  }
+
   return (
     <div className="App">
       <Counter />
-      {/* управляемый компонент */}
 
       <PostForm create={createPost} />
 
-      <PostList posts={posts} title='Список постовJS' />
-
-      {/* <PostItem post={} /> */}
-
-      {/* <h2>{value}</h2>
-      <input
-        type="text"
-        value={value}
-        onChange={event => setValue(event.target.value)}
-      /> */}
+      {posts.length !== 0
+        ? <PostList remove={removePost} posts={posts} title='Список постовJS' />
+        : <h2 style={{ textAlign: 'center' }}>Посты не найдены!</h2>
+      }
 
     </div>
   );

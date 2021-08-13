@@ -1,4 +1,5 @@
 import React from 'react';
+import MuButton from './UI/button/MyButton';
 
 const PostItem = (props) => {
 
@@ -11,7 +12,9 @@ const PostItem = (props) => {
                 </div>
             </div>
             <div className="post__btns">
-                <button>Удаление поста</button>
+                <MuButton onClick={() => { props.remove(props.post) }}>
+                    Удаление поста
+                </MuButton>
             </div>
         </div>
     );
