@@ -5,6 +5,7 @@ import PostList from "./components/PostList";
 import './styles/App.css';
 import MyButton from './components/UI/button/MyButton';
 import MyInput from "./components/UI/input/MyInput";
+import PostForm from "./components/PostForm";
 
 
 function App() {
@@ -19,7 +20,7 @@ function App() {
   const [likes, setLikes] = useState(0),
     [value, setValue] = useState('текст');
 
-  const [post, setPost] = useState({ title: '', body: '' });
+
   // [body, setBody] = useState('');
 
   // const bodyInputRef = useRef();
@@ -32,21 +33,8 @@ function App() {
     setLikes(likes - 1);
   }
 
-  const addNewPost = (e) => {
-    e.preventDefault();
-
-    // console.log(bodyInputRef.current.value);
-    // const newPost = {
-    //   id: Date.now(),
-    //   title,
-    //   body
-    // }
-
-    setPosts([...posts, { ...post, id: Date.now() }]);
-
-    setPost({ title: '', body: '' });
-    // setTitle('');
-    // setBody('');
+  const createPost = (newPost) => {
+    setPosts([...posts, newPost]);
   }
 
   return (
@@ -54,26 +42,7 @@ function App() {
       <Counter />
       {/* управляемый компонент */}
 
-      <form>
-        <MyInput
-          value={post.title}
-          onChange={e => setPost({ ...post, title: e.target.value })}
-          type="text"
-          placeholder="Название поста" />
-
-        {/* не рекомендуется в реакт ползать по дом дереву на прямую */}
-        {/* <input ref={bodyInputRef} type="text" /> */}
-
-        {/* Неуправляемы / Неконтролируемы компонент*/}
-        <MyInput
-          value={post.body}
-          onChange={e => setPost({ ...post, body: e.target.value })}
-          type="text"
-          placeholder="Описание поста"
-        />
-
-        <MyButton onClick={addNewPost}>Создать пост</MyButton>
-      </form>
+      <PostForm create={createPost} />
 
       <PostList posts={posts} title='Список постовJS' />
 
