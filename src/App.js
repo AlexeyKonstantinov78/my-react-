@@ -11,6 +11,7 @@ import MySelect from "./components/UI/select/MySelect";
 
 function App() {
 
+  // хуки 
   const [posts, setPosts] = useState([
     { id: 1, title: 'Js', body: 'Description3' },
     { id: 2, title: 'Js2', body: 'Description2' },
@@ -21,9 +22,24 @@ function App() {
   const [likes, setLikes] = useState(0),
     [value, setValue] = useState('текст');
 
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const [selectedSort, setSelectedSort] = useState('');
+
+
+
+
+  function getSortedPosts() {
+    if (selectedSort) {
+      return [...posts].sort((a, b) => a[selectedSort].localeCompare(b[selectedSort]));
+    }
+
+    return posts;
+  }
+
+  const sortedPosts = getSortedPosts();
 
   // [body, setBody] = useState('');
-
   // const bodyInputRef = useRef();
 
   function increment() {
@@ -33,8 +49,6 @@ function App() {
   function decrement() {
     setLikes(likes - 1);
   }
-
-  const [selectedSort, setSelectedSort] = useState('');
 
   const createPost = (newPost) => {
     setPosts([...posts, newPost]);
@@ -47,7 +61,7 @@ function App() {
 
   const sortPosts = (sort) => {
     setSelectedSort(sort);
-    setPosts([...posts].sort((a, b) => a[sort].localeCompare(b[sort])));
+
   }
 
   return (
@@ -58,6 +72,11 @@ function App() {
 
       <hr style={{ margin: '15px 0' }} />
       <div>
+        <MyInput
+          value={searchQuery}
+          onChange={e => setSearchQuery(e.target.value)}
+          placeholder="поиск..."
+        />
         <MySelect
           value={selectedSort}
           onChange={sortPosts}
@@ -70,7 +89,7 @@ function App() {
       </div>
 
       {posts.length !== 0
-        ? <PostList remove={removePost} posts={posts} title='Список постовJS' />
+        ? <PostList remove={removePost} posts={sortedPosts} title='Список постовJS' />
         : <h2 style={{ textAlign: 'center' }}>Посты не найдены!</h2>
       }
 
