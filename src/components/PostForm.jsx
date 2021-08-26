@@ -8,23 +8,13 @@ const PostForms = ({ create }) => {
     const addNewPost = (e) => {
         e.preventDefault();
 
-        // console.log(bodyInputRef.current.value);
-        // const newPost = {
-        //   id: Date.now(),
-        //   title,
-        //   body
-        // }
-
-        // setPosts([...posts, { ...post, id: Date.now() }]);
-
         const newPost = {
             ...post, id: Date.now()
         }
 
         create(newPost);
         setPost({ title: '', body: '' });
-        // setTitle('');
-        // setBody('');
+
     }
 
     return (

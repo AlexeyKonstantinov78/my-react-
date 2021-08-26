@@ -1,12 +1,11 @@
-import React, { useState, useRef, useMemo } from "react";
+import React, { useState, useMemo } from "react";
 import Counter from "./components/Counter";
-import PostItem from "./components/PostItem";
 import PostList from "./components/PostList";
 import './styles/App.css';
-import MyButton from './components/UI/button/MyButton';
-import MyInput from "./components/UI/input/MyInput";
 import PostForm from "./components/PostForm";
-import MySelect from "./components/UI/select/MySelect";
+import PostFiltr from "./components/PostFiltr";
+import MyModal from "./components/UI/MyModal/MyModal";
+import MyButton from "./components/UI/button/MyButton";
 
 
 function App() {
@@ -22,26 +21,25 @@ function App() {
   const [likes, setLikes] = useState(0),
     [value, setValue] = useState('текст');
 
-  const [searchQuery, setSearchQuery] = useState('');
+  const [filter, setFilter] = useState({ sort: '', query: '' });
 
-  const [selectedSort, setSelectedSort] = useState('');
 
   const sortedPosts = useMemo(() => {
     console.log('отработанна функция сортировки');
-    if (selectedSort) {
-      return [...posts].sort((a, b) => a[selectedSort].localeCompare(b[selectedSort]));
+    if (filter.sort) {
+      return [...posts].sort((a, b) => a[filter.sort].localeCompare(b[filter.sort]));
     }
 
     return posts;
-  }, [selectedSort, posts]);
+  }, [filter.sort, posts]);
 
   const sortedAndSearchedPosts = useMemo(() => {
-    return sortedPosts.filter(post => post.title.toLowerCase().includes(searchQuery.toLowerCase()));
-  }, [searchQuery, sortedPosts]);
+    return sortedPosts.filter(post => post.title.toLowerCase().includes(filter.query.toLowerCase()));
+  }, [filter.query, sortedPosts]);
 
-  // [body, setBody] = useState('');
-  // const bodyInputRef = useRef();
+  const [modal, setModal] = useState(false);
 
+  // функции 
   function increment() {
     setLikes(likes + 1);
   }
@@ -52,6 +50,7 @@ function App() {
 
   const createPost = (newPost) => {
     setPosts([...posts, newPost]);
+    setModal(false);
   }
 
   // удаление поста
@@ -59,39 +58,25 @@ function App() {
     setPosts(posts.filter(p => p.id !== post.id))
   }
 
-  const sortPosts = (sort) => {
-    setSelectedSort(sort);
-
-  }
-
   return (
     <div className="App">
       <Counter />
 
-      <PostForm create={createPost} />
+      <MyButton
+        style={{ marginTop: '30px' }}
+        onClick={() => setModal(true)}>
+        Создать пост
+      </MyButton>
+      <MyModal visible={modal} setVisible={setModal}>
+        <PostForm create={createPost} />
+      </MyModal>
 
       <hr style={{ margin: '15px 0' }} />
-      <div>
-        <MyInput
-          value={searchQuery}
-          onChange={e => setSearchQuery(e.target.value)}
-          placeholder="поиск..."
-        />
-        <MySelect
-          value={selectedSort}
-          onChange={sortPosts}
-          defaultValue="Сортировка по"
-          options={[
-            { value: 'title', name: 'По названию' },
-            { value: 'body', name: 'По описанию' },
-          ]}
-        />
-      </div>
+      <PostFiltr
+        filter={filter}
+        setFilter={setFilter} />
 
-      {sortedAndSearchedPosts.length !== 0
-        ? <PostList remove={removePost} posts={sortedAndSearchedPosts} title='Список постовJS' />
-        : <h2 style={{ textAlign: 'center' }}>Посты не найдены!</h2>
-      }
+      <PostList remove={removePost} posts={sortedAndSearchedPosts} title='Список постовJS' />
 
     </div>
   );
